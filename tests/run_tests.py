@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''VIC testing command line interface'''
+''' `VIC testing command line interface'''
 
 from __future__ import print_function
 import os

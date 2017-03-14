@@ -41,9 +41,9 @@ VICPATH = ../../vic_run
 SHELL = /bin/bash
 
 # Set CC = your compiler here
-ifndef CC
-CC=gcc
-endif
+# ifndef CC
+CC=nvcc
+# endif
 
 GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
 HOSTNAME := $(shell uname -n)
@@ -62,11 +62,12 @@ LOG_LVL = 5
 INCLUDES = -I ${DRIVERPATH}/include -I $(SHAREDPATH)/include -I ${VICPATH}/include
 
 # Uncomment for normal optimized code flags (fastest run option)
-#CFLAGS  = -O3 -Wall -Wno-unused
+#CFLAGS  =  
+#-O3 -Wall -Wno-unused
 # LIBRARY = -lm
 
 # Uncomment to include debugging information
-CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 \
+CFLAGS  =  ${INCLUDES} -g \
 					 -DLOG_LVL=$(LOG_LVL) \
 					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \

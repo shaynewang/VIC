@@ -27,6 +27,7 @@
 ******************************************************************************/
 
 #include <vic_run.h>
+#include <stdio.h>
 
 
 /******************************************************************************
@@ -183,7 +184,7 @@ surface_fluxes(bool                 overstory,
     double            store_aero_cond_used[2];
     double            store_pot_evap;
 
-    example_print();
+    // example_print();
 
     // Structures holding values for current snow step
     energy_bal_struct snow_energy;    // energy fluxes at snowpack surface
@@ -378,7 +379,8 @@ surface_fluxes(bool                 overstory,
     /*************************
        Compute surface fluxes
     *************************/
-
+    
+    int test_iterations = 0;
     do
     {
         /** Solve energy balance for all sub-model time steps **/
@@ -419,6 +421,7 @@ surface_fluxes(bool                 overstory,
                    force->fdir[hidx],
                    LAIlayer,
                    faPAR);
+
 
             /* Convert to absolute (unnormalized) absorbed PAR per leaf area per canopy layer
                (umol(photons)/m2 leaf area / s); dividing by Epar converts PAR from W to umol(photons)/s */
@@ -723,13 +726,17 @@ surface_fluxes(bool                 overstory,
                     store_tol_over = 0;
                     tol_over = 0;
                 }
+
+		test_iterations++;
             }
             while ((fabs(tol_under - last_tol_under) > param.TOL_GRND) &&
                    (tol_under != 0) && (under_iter < MAX_ITER_GRND_CANOPY));
+	
         }
         while ((fabs(tol_over - last_tol_over) > param.TOL_OVER &&
                 overstory) && (tol_over != 0) &&
                (over_iter < MAX_ITER_GRND_CANOPY));
+
 
         /**************************************
            Compute GPP, Raut, and NPP
@@ -951,6 +958,7 @@ surface_fluxes(bool                 overstory,
     }
     while (hidx < endhidx);
 
+
     /************************************************
        Store snow variables for sub-model time steps
     ************************************************/
@@ -1082,6 +1090,7 @@ surface_fluxes(bool                 overstory,
                                   gp->dt;
         }
     }
+    
 
     /********************************************************
        Compute Runoff, Baseflow, and Soil Moisture Transport

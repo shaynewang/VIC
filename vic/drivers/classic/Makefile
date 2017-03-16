@@ -74,7 +74,8 @@ CFLAGS  =  ${INCLUDES} -g \
 					 -DHOSTNAME=\"$(HOSTNAME)\" \
                                          -lstdc++ \
 					 -lcudart \
-					 -lcuda
+					 -lcuda \
+					 -pg
 LIBRARY = -lm
 
 # Uncomment to include execution profiling information

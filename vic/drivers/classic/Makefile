@@ -109,35 +109,33 @@ CUDA_SRCS = \
 	$(wildcard ${SHAREDPATH}/src/*.cu)
 
 OBJS = $(SRCS:%.o=%.c)
-CUDA_OBJS = $(CUDA_SRCS:%.o=%.cu)
+CUDA_OBJS = $(CUDA_SRCS:%.cu=%.o)
 
 
 all:
+	make cuda_objects
 	make depend
 	make model
 
 default:
+	make cuda_objects
 	make depend
 	make model
 
 full:
 	make clean
+	make cuda_objects
 	make depend
 	make tags
 	make model
-
-
-example.o: ${VICPATH}/src/example.cu ${VICPATH}/include/example.h 
-	nvcc -c -I ${VICPATH}/include/ ${VICPATH}/src/example.cu -o example.o 
-
 	
 
 clean::
 	\rm -f core log
 	\rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
 
-model: $(OBJS) example.o
-	$(CC) example.o -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
+model: $(OBJS)
+	$(CC) $(CUDA_OBJS) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
 
 
 # -------------------------------------------------------------
@@ -155,8 +153,11 @@ clean::
 # depend
 # -------------------------------------------------------------
 depend: .depend
-.depend: $(SRCS) $(HDRS) example.o
-	$(CC) $(CFLAGS) example.o -M $(SRCS) > $@
+.depend: $(SRCS) $(HDRS) 
+	$(CC) $(CFLAGS) $(CUDA_OBJS) -M $(SRCS) > $@
+
+cuda_objects: $(CUDA_SRCS) $(HDRS)
+	nvcc -c $(INCLUDES) $(CUDA_SRCS) -o $(CUDA_OBJS)
 
 clean::
-	\rm -f .depend
+	\rm -f .depend ./*.o

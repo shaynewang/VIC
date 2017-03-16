@@ -1,0 +1,1 @@
+./vic_classic.exe  -g ../../../../VIC_sample_data/classic/Stehekin/parameters/global_param.STEHE.txt

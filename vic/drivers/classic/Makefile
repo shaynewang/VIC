@@ -70,7 +70,8 @@ CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 \
 					 -DLOG_LVL=$(LOG_LVL) \
 					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \
-					 -DHOSTNAME=\"$(HOSTNAME)\"
+					 -DHOSTNAME=\"$(HOSTNAME)\" \
+                                         -lstdc++
 LIBRARY = -lm
 
 # Uncomment to include execution profiling information

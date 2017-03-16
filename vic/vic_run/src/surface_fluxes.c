@@ -28,6 +28,7 @@
 
 #include <vic_run.h>
 
+
 /******************************************************************************
 * @brief        This routine computes all surface fluxes
 ******************************************************************************/
@@ -181,6 +182,8 @@ surface_fluxes(bool                 overstory,
     double            store_ppt;
     double            store_aero_cond_used[2];
     double            store_pot_evap;
+
+    example_print();
 
     // Structures holding values for current snow step
     energy_bal_struct snow_energy;    // energy fluxes at snowpack surface

@@ -71,7 +71,9 @@ CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 \
 					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \
 					 -DHOSTNAME=\"$(HOSTNAME)\" \
-                                         -lstdc++
+                                         -lstdc++ \
+					 -lcudart \
+					 -lcuda
 LIBRARY = -lm
 
 # Uncomment to include execution profiling information
@@ -100,7 +102,14 @@ SRCS = \
 	$(wildcard ${DRIVERPATH}/src/*.c) \
 	$(wildcard ${SHAREDPATH}/src/*.c)
 
+CUDA_SRCS = \
+	$(wildcard ${VICPATH}/src/*.cu) \
+	$(wildcard ${DRIVERPATH}/src/*.cu) \
+	$(wildcard ${SHAREDPATH}/src/*.cu)
+
 OBJS = $(SRCS:%.o=%.c)
+CUDA_OBJS = $(CUDA_SRCS:%.o=%.cu)
+
 
 all:
 	make depend
@@ -116,12 +125,19 @@ full:
 	make tags
 	make model
 
+
+example.o: ${VICPATH}/src/example.cu ${VICPATH}/include/example.h 
+	nvcc -c -I ${VICPATH}/include/ ${VICPATH}/src/example.cu -o example.o 
+
+	
+
 clean::
 	\rm -f core log
 	\rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
 
-model: $(OBJS)
-	$(CC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
+model: $(OBJS) example.o
+	$(CC) example.o -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
+
 
 # -------------------------------------------------------------
 # tags
@@ -138,8 +154,8 @@ clean::
 # depend
 # -------------------------------------------------------------
 depend: .depend
-.depend: $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -M $(SRCS) > $@
+.depend: $(SRCS) $(HDRS) example.o
+	$(CC) $(CFLAGS) example.o -M $(SRCS) > $@
 
 clean::
 	\rm -f .depend

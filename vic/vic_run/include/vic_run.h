@@ -28,6 +28,26 @@
 #define VIC_RUN_H
 
 #include <vic_def.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
+
+
+/*************** Cuda Headers ************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Put all Cuda protoypes here
+
+void example_print(void);
+
+#ifdef __cplusplus
+}
+#endif
+
+
+/*****************************************************/
+
 
 void advect_carbon_storage(double, double, lake_var_struct *,
                            cell_data_struct *);

@@ -26,6 +26,7 @@
 ******************************************************************************/
 
 #include <vic_run.h>
+#include <stdio.h>
 
 veg_lib_struct *vic_run_veg_lib;
 
@@ -93,6 +94,7 @@ vic_run(force_data_struct   *force,
     veg_var_struct         **veg_var;
     energy_bal_struct      **energy;
     snow_data_struct       **snow;
+    int flux_calls = 0;
 
     // assign vic_run_veg_lib to veg_lib, so that the veg_lib for the correct
     // grid cell is used within vic_run. For simplicity sake, use vic_run_veg_lib
@@ -129,10 +131,12 @@ vic_run(force_data_struct   *force,
     force->out_rain = 0;
     force->out_snow = 0;
 
+    int LAI_cnt = 0;
     // Convert LAI from global to local
     for (iveg = 0; iveg < Nveg; iveg++) {
         veg_class = veg_con[iveg].veg_class;
         for (band = 0; band < Nbands; band++) {
+            LAI_cnt++;
             veg_var[iveg][band].LAI /= veg_var[iveg][band].fcanopy;
             veg_var[iveg][band].Wdew /= veg_var[iveg][band].fcanopy;
             veg_var[iveg][band].Wdmax = veg_var[iveg][band].LAI *
@@ -140,6 +144,8 @@ vic_run(force_data_struct   *force,
             snow[iveg][band].snow_canopy /= veg_var[iveg][band].fcanopy;
         }
     }
+
+	    
 
     /**************************************************
        Solve Energy and/or Water Balance for Each
@@ -312,6 +318,7 @@ vic_run(force_data_struct   *force,
             ******************************/
 
             for (band = 0; band < Nbands; band++) {
+		flux_calls++;
                 if (soil_con->AreaFract[band] > 0) {
                     lag_one = veg_con[iveg].lag_one;
                     sigma_slope = veg_con[iveg].sigma_slope;
@@ -483,5 +490,6 @@ vic_run(force_data_struct   *force,
         }
     } // end if (options.LAKES && lake_con->lake_idx >= 0)
 
+    printf("FLUX CALLS:\n %d", flux_calls);
     return (0);
 }

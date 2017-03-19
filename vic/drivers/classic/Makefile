@@ -162,3 +162,6 @@ cuda_objects: $(CUDA_SRCS) $(HDRS)
 
 clean::
 	\rm -f .depend ./*.o
+
+run:
+	./vic_classic.exe  -g ../../../../VIC_sample_data/classic/Stehekin/parameters/global_param.STEHE.txt

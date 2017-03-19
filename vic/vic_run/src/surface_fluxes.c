@@ -271,8 +271,6 @@ surface_fluxes(bool                 overstory,
     step_snow = (*snow);
     for (lidx = 0; lidx < Nlayers; lidx++) {
         step_layer[lidx] = layer[lidx];
-    }
-    for (lidx = 0; lidx < Nlayers; lidx++) {
         step_layer[lidx].evap = 0;
     }
     soil_veg_var.canopyevap = 0;

@@ -528,6 +528,9 @@ surface_fluxes(bool                 overstory,
                 iter_snow_veg_var = snow_veg_var;
                 iter_soil_veg_var = soil_veg_var;
                 iter_snow = step_snow;
+                
+		// Our Cuda Wrapper
+                init_layer_data(iter_layer, step_layer, Nlayers);
                 for (lidx = 0; lidx < Nlayers; lidx++) {
                     iter_layer[lidx] = step_layer[lidx];
                 }

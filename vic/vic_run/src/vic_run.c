@@ -490,6 +490,5 @@ vic_run(force_data_struct   *force,
         }
     } // end if (options.LAKES && lake_con->lake_idx >= 0)
 
-    printf("FLUX CALLS:\n %d", flux_calls);
     return (0);
 }

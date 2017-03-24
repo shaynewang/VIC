@@ -40,6 +40,7 @@ extern "C" {
 // Put all Cuda protoypes here
 
 void example_print(void);
+void init_layer_data(layer_data_struct* obj, layer_data_struct* val, int size);
 
 #ifdef __cplusplus
 }
